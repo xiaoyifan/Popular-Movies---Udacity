@@ -7,6 +7,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,11 +20,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MoviesFragment extends Fragment {
+
+    private ArrayAdapter<String> mMovieAdapter;
 
     public MoviesFragment() {
     }
@@ -26,7 +35,24 @@ public class MoviesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+
+        mMovieAdapter = new ArrayAdapter<String>(
+                //the current context, the fragment's parent activity
+                getActivity(),
+                //ID of list item layout
+                R.layout.list_item_movie,
+                //ID of the textview to populate
+                R.id.list_item_movie_textview,
+                //forecast data
+                new ArrayList<String>());
+
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        ListView myListView = (ListView) rootView.findViewById(R.id.listview_movie);
+
+        myListView.setAdapter(mMovieAdapter);
+
+        return rootView;
     }
 
     @Override
@@ -49,6 +75,44 @@ public class MoviesFragment extends Fragment {
     public class FetchMoviesTask extends AsyncTask<String, Void, String[]>{
 
         final String LOG_TAG = MoviesFragment.class.getSimpleName();
+
+
+        private String[] getMovieDataFromJson(String forecastJsonStr)
+                throws JSONException {
+
+            // These are the names of the JSON objects that need to be extracted.
+            final String OWM_LIST = "results";
+            final String OWM_TITLE = "original_title";
+            final String OWM_AVG_VOTE = "vote_average";
+            final String OWM_OVERVIEW = "overview";
+            final String OWM_POSTERPATH = "poster_path";
+            final String OWM_DATE = "release_date";
+
+            JSONObject forecastJson = new JSONObject(forecastJsonStr);
+            JSONArray movieArray = forecastJson.getJSONArray(OWM_LIST);
+
+            String[] resultStrs = new String[movieArray.length()];
+
+
+            for(int i = 0; i < movieArray.length(); i++) {
+
+                // Get the JSON object representing the day
+                JSONObject movieItem = movieArray.getJSONObject(i);
+
+                String title = movieItem.getString(OWM_TITLE);
+                String date = movieItem.getString(OWM_DATE);
+
+                resultStrs[i] = title + " - " + date;
+            }
+
+            for (String s : resultStrs) {
+                Log.v(LOG_TAG, "Movie entry: " + s);
+            }
+
+
+            return resultStrs;
+
+        }
 
         @Override
         protected String[] doInBackground(String... params) {
@@ -117,7 +181,28 @@ public class MoviesFragment extends Fragment {
             }
 
 
-            return new String[0];
+            try{
+                return getMovieDataFromJson(moviesJsonStr);
+            }
+            catch (JSONException e) {
+                Log.e(LOG_TAG, e.getMessage(), e);
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String[] results) {
+            super.onPostExecute(results);
+
+            if(results != null){
+                mMovieAdapter.clear();
+                for (String dayForecast: results){
+                    mMovieAdapter.add(dayForecast);
+                }
+            }
+
         }
     }
 }
