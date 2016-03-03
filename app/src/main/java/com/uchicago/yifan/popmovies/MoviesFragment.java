@@ -1,5 +1,6 @@
 package com.uchicago.yifan.popmovies;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,7 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.GridView;
+
+import com.uchicago.yifan.popmovies.adapter.GridAdapter;
+import com.uchicago.yifan.popmovies.model.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +31,7 @@ import java.util.ArrayList;
  */
 public class MoviesFragment extends Fragment {
 
-    private ArrayAdapter<String> mMovieAdapter;
+    private ArrayAdapter<Movie> mMovieAdapter;
 
     public MoviesFragment() {
     }
@@ -36,21 +40,7 @@ public class MoviesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        mMovieAdapter = new ArrayAdapter<String>(
-                //the current context, the fragment's parent activity
-                getActivity(),
-                //ID of list item layout
-                R.layout.list_item_movie,
-                //ID of the textview to populate
-                R.id.list_item_movie_textview,
-                //forecast data
-                new ArrayList<String>());
-
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        ListView myListView = (ListView) rootView.findViewById(R.id.listview_movie);
-
-        myListView.setAdapter(mMovieAdapter);
 
         return rootView;
     }
@@ -71,51 +61,69 @@ public class MoviesFragment extends Fragment {
         moviesTask.execute("popularity.desc");
     }
 
+    private void setAdapter( final ArrayList<Movie> movieList )
+    {
+        GridView gridview = (GridView) getView().findViewById(R.id.gridview);
+        gridview.setAdapter(new GridAdapter(getActivity(), movieList));
 
-    public class FetchMoviesTask extends AsyncTask<String, Void, String[]>{
+    }
+
+
+    public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>>{
 
         final String LOG_TAG = MoviesFragment.class.getSimpleName();
 
 
-        private String[] getMovieDataFromJson(String forecastJsonStr)
-                throws JSONException {
+        public ArrayList<Movie> createMovieListFromJson(String moviesJsonString) throws JSONException {
 
-            // These are the names of the JSON objects that need to be extracted.
-            final String OWM_LIST = "results";
-            final String OWM_TITLE = "original_title";
-            final String OWM_AVG_VOTE = "vote_average";
-            final String OWM_OVERVIEW = "overview";
-            final String OWM_POSTERPATH = "poster_path";
-            final String OWM_DATE = "release_date";
+            JSONObject moviesJson = new JSONObject(moviesJsonString);
 
-            JSONObject forecastJson = new JSONObject(forecastJsonStr);
-            JSONArray movieArray = forecastJson.getJSONArray(OWM_LIST);
+            final String MOVIEDB_RESULTS = "results";
+            JSONArray moviesArray = moviesJson.getJSONArray(MOVIEDB_RESULTS);
 
-            String[] resultStrs = new String[movieArray.length()];
-
-
-            for(int i = 0; i < movieArray.length(); i++) {
-
-                // Get the JSON object representing the day
-                JSONObject movieItem = movieArray.getJSONObject(i);
-
-                String title = movieItem.getString(OWM_TITLE);
-                String date = movieItem.getString(OWM_DATE);
-
-                resultStrs[i] = title + " - " + date;
-            }
-
-            for (String s : resultStrs) {
-                Log.v(LOG_TAG, "Movie entry: " + s);
+            ArrayList<Movie> movieList = new ArrayList<>();
+            for(int movieNumber = 0; movieNumber < moviesArray.length(); ++movieNumber)
+            {
+                Movie movie = parseJsonMovieObject(moviesArray.getJSONObject(movieNumber));
+                movieList.add(movie);
             }
 
 
-            return resultStrs;
+            return movieList;
+        }
 
+
+
+        private Movie parseJsonMovieObject(JSONObject movieJsonObject) throws JSONException {
+
+            final String movie_original_title = "original_title";
+            String originalTitle = movieJsonObject.getString(movie_original_title);
+
+            final String movie_overview = "overview";
+            String overview = movieJsonObject.getString(movie_overview);
+
+            final String movie_vote_avg = "vote_average";
+            double voteAvg = movieJsonObject.getDouble(movie_vote_avg);
+
+            final String movie_release_date = "release_date";
+            String releaseDate = movieJsonObject.getString(movie_release_date);
+
+            final String movie_poster_path = "poster_path";
+            String posterPath = movieJsonObject.getString(movie_poster_path);
+
+            final String poster_URL = "http://image.tmdb.org/t/p/";
+            Uri.Builder posterUrl = Uri.parse(poster_URL).buildUpon();
+            String posterSize = "w185";
+            posterUrl.appendEncodedPath( posterSize );
+            posterUrl.appendEncodedPath(posterPath);
+
+            String imageUrl = posterUrl.toString();
+
+            return new Movie(originalTitle, overview, voteAvg, releaseDate, imageUrl);
         }
 
         @Override
-        protected String[] doInBackground(String... params) {
+        protected ArrayList<Movie> doInBackground(String... params) {
 
             if (params.length == 0)
                 return null;
@@ -182,7 +190,7 @@ public class MoviesFragment extends Fragment {
 
 
             try{
-                return getMovieDataFromJson(moviesJsonStr);
+                return createMovieListFromJson(moviesJsonStr);
             }
             catch (JSONException e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
@@ -193,15 +201,9 @@ public class MoviesFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String[] results) {
-            super.onPostExecute(results);
+        protected void onPostExecute(ArrayList<Movie> movieList) {
 
-            if(results != null){
-                mMovieAdapter.clear();
-                for (String dayForecast: results){
-                    mMovieAdapter.add(dayForecast);
-                }
-            }
+            MoviesFragment.this.setAdapter(movieList);
 
         }
     }
