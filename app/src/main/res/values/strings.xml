@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Pop Movies</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+    <string name="pref_sort">sortby</string>
+    <string name="pref_title">Sort By</string>
+
+    <string name="pref_sort_rate">vote_average.desc</string>
+    <string name="pref_sort_pop">popularity.desc</string>
+
+    <string name="pref_sort_label_rate">Rating</string>
+    <string name="pref_sort_label_pop">Popularity</string>
+
 </resources>

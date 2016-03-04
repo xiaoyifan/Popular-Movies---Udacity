@@ -1,8 +1,10 @@
 package com.uchicago.yifan.popmovies;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,8 +59,9 @@ public class MoviesFragment extends Fragment {
     public void updateData(){
 
         FetchMoviesTask moviesTask = new FetchMoviesTask();
-
-        moviesTask.execute("popularity.desc");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String value = preferences.getString("sortby", "popularity.desc");
+        moviesTask.execute(value);
     }
 
     private void setAdapter( final ArrayList<Movie> movieList )
@@ -136,11 +139,18 @@ public class MoviesFragment extends Fragment {
 
             try{
 
-                String urlInit = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=27d49c583aca6b583253058da9cca0de";
+                final String baseUrl = "http://api.themoviedb.org/3/discover/movie?";
+                final String SORT_PARAM = "sort_by";
+                final String API_KEY = "api_key";
 
-                URL url = new URL(urlInit);
+                Uri queryUri = Uri.parse(baseUrl).buildUpon()
+                        .appendQueryParameter(SORT_PARAM, params[0])
+                        .appendQueryParameter(API_KEY, "27d49c583aca6b583253058da9cca0de")
+                        .build();
 
-                Log.v(LOG_TAG, "THE URL IS: "+ urlInit);
+                URL url = new URL(queryUri.toString());
+
+                Log.v(LOG_TAG, "THE URL IS: "+ url);
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
