@@ -55,7 +55,7 @@ public class DetailActivityFragment extends Fragment {
 
         ImageView imageView = (ImageView)rootView.findViewById(R.id.movie_poster);
         String url = selectedMovie.getImageUrl();
-        Picasso.with(getContext()).load(url).into(imageView);
+        Picasso.with(getContext()).load(url).placeholder(R.mipmap.grid_placeholder).into(imageView);
 
     }
 }

@@ -176,7 +176,7 @@ public class MoviesFragment extends Fragment {
 
                 Uri queryUri = Uri.parse(baseUrl).buildUpon()
                         .appendQueryParameter(SORT_PARAM, params[0])
-                        .appendQueryParameter(API_KEY, "27d49c583aca6b583253058da9cca0de")
+                        .appendQueryParameter(API_KEY, Constants.API_KEY)
                         .build();
 
                 URL url = new URL(queryUri.toString());

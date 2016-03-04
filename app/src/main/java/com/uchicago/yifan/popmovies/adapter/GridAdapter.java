@@ -50,7 +50,7 @@ public class GridAdapter extends BaseAdapter {
 
         Movie movie = getItem(position);
         String url = movie.getImageUrl();
-        Picasso.with(context).load(url).into(imageView);
+        Picasso.with(context).load(url).placeholder(R.mipmap.grid_placeholder).into(imageView);
         return imageView;
     }
 }
