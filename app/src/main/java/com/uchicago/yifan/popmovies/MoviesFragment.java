@@ -8,9 +8,11 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import com.uchicago.yifan.popmovies.adapter.GridAdapter;
@@ -33,8 +35,6 @@ import java.util.ArrayList;
  */
 public class MoviesFragment extends Fragment {
 
-    private ArrayAdapter<Movie> mMovieAdapter;
-
     public MoviesFragment() {
     }
 
@@ -54,6 +54,24 @@ public class MoviesFragment extends Fragment {
 
         super.onStart();
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_refresh) {
+            updateData();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void updateData(){
