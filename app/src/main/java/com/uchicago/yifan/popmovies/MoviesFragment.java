@@ -1,5 +1,6 @@
 package com.uchicago.yifan.popmovies;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.uchicago.yifan.popmovies.adapter.GridAdapter;
@@ -74,6 +76,7 @@ public class MoviesFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+
     public void updateData(){
 
         FetchMoviesTask moviesTask = new FetchMoviesTask();
@@ -86,6 +89,16 @@ public class MoviesFragment extends Fragment {
     {
         GridView gridview = (GridView) getView().findViewById(R.id.gridview);
         gridview.setAdapter(new GridAdapter(getActivity(), movieList));
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Movie selectedMovie = movieList.get(position);
+                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+                detailIntent.putExtra(DetailActivity.EXTRA_MOVIE, selectedMovie);
+                startActivity(detailIntent);
+            }
+        });
 
     }
 
