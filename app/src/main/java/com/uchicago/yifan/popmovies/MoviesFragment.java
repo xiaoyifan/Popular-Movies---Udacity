@@ -102,7 +102,7 @@ public class MoviesFragment extends Fragment {
 
     }
 
-
+    //Cite: the Async Task code in our Sunshine app in the tutorial: https://github.com/udacity/Sunshine-Version-2
     public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>>{
 
         final String LOG_TAG = MoviesFragment.class.getSimpleName();

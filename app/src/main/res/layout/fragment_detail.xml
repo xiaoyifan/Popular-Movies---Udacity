@@ -1,3 +1,5 @@
+<!--Cite: https://github.com/kunal-jaggi/PopularMoviesStage1/blob/master/app/src/main/res/layout/fragment_details.xml-->
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"

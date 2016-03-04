@@ -5,5 +5,5 @@ package com.uchicago.yifan.popmovies;
  */
 public class Constants {
 
-    public static final String API_KEY = "27d49c583aca6b583253058da9cca0de";
+    public static final String API_KEY = "YOUR_API_KEY";
 }
