@@ -32,25 +32,30 @@ public class DetailActivityFragment extends Fragment {
             Movie selectedMovie = (Movie) intent.getSerializableExtra(DetailActivity.EXTRA_MOVIE);
             if (selectedMovie != null) {
 
-                TextView titleView = (TextView) rootView.findViewById(R.id.movieTitle);
-                titleView.setText(selectedMovie.getOriginalTitle());
-
-                TextView releaseView = (TextView)rootView.findViewById(R.id.movieReleaseYear);
-                releaseView.setText(selectedMovie.getReleaseDate());
-
-                TextView overviewText = (TextView)rootView.findViewById(R.id.movieOverview);
-                overviewText.setText(selectedMovie.getOverview());
-
-                TextView ratingView = (TextView)rootView.findViewById(R.id.movieRating);
-                ratingView.setText(selectedMovie.getUserRating()+"");
-
-                ImageView imageView = (ImageView)rootView.findViewById(R.id.moviePoster);
-               String url = selectedMovie.getImageUrl();
-                Picasso.with(getContext()).load(url).into(imageView);
+                loadContentsIntoDetailView(selectedMovie, rootView);
             }
         }
 
         return rootView;
+    }
+
+    private void loadContentsIntoDetailView(Movie selectedMovie, View rootView){
+
+        TextView titleView = (TextView) rootView.findViewById(R.id.movie_title);
+        titleView.setText(selectedMovie.getOriginalTitle());
+
+        TextView releaseView = (TextView)rootView.findViewById(R.id.movie_release_date);
+        releaseView.setText(selectedMovie.getReleaseDate());
+
+        TextView overviewText = (TextView)rootView.findViewById(R.id.movie_overview);
+        overviewText.setText(selectedMovie.getOverview());
+
+        TextView ratingView = (TextView)rootView.findViewById(R.id.movie_rating);
+        ratingView.setText("Rating: "+selectedMovie.getUserRating()+"/10");
+
+        ImageView imageView = (ImageView)rootView.findViewById(R.id.movie_poster);
+        String url = selectedMovie.getImageUrl();
+        Picasso.with(getContext()).load(url).into(imageView);
 
     }
 }

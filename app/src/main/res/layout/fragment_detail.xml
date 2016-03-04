@@ -6,59 +6,59 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.DetailsFragment">
+        tools:context=".view.DetailActivityFragment">
 
         <LinearLayout
-            android:id="@+id/movieTitlePlaceHolder"
+            android:id="@+id/movie_topbar"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:background="#3d94d3">
 
             <TextView
-                android:id="@+id/movieTitle"
+                android:id="@+id/movie_title"
                 style="@style/MovieTitle" />
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/moviePoster"
+            android:id="@+id/movie_poster"
             style="@style/MovieItemPadding"
-            android:layout_width="200dp"
+            android:layout_width="160dp"
             android:layout_height="220dp"
-            android:layout_below="@id/movieTitlePlaceHolder"
+            android:layout_below="@id/movie_topbar"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:scaleType="centerCrop" />
 
         <TextView
-            android:id="@+id/movieReleaseYear"
+            android:id="@+id/movie_release_date"
             style="@style/MovieItemPadding"
-            android:layout_below="@id/movieTitlePlaceHolder"
+            android:layout_below="@id/movie_topbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
-            android:layout_toRightOf="@id/moviePoster"
+            android:layout_toRightOf="@id/movie_poster"
             android:textAppearance="?android:attr/textAppearanceMedium" />
         />
 
         <TextView
-            android:id="@+id/movieRating"
+            android:id="@+id/movie_rating"
             style="@style/MovieItemPadding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="150dp"
-            android:layout_toRightOf="@id/moviePoster"
+            android:layout_toRightOf="@id/movie_poster"
             android:textAppearance="?android:attr/textAppearanceSmall" />
         />
 
         <TextView
-            android:id="@+id/movieOverview"
+            android:id="@+id/movie_overview"
             style="@style/MovieItemPadding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/moviePoster"
+            android:layout_below="@id/movie_poster"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
