@@ -10,6 +10,11 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:authorities="com.uchicago.yifan.popmovies"
+            android:name=".data.MovieProvider"
+            android:enabled="true"
+            />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
