@@ -14,4 +14,7 @@
     <string name="pref_sort_label_pop">Popularity</string>
     <string name="title_activity_detail">DetailActivity</string>
 
+    <string name="movie_item_btn_favorite_desc">Save to favorites</string>
+
+
 </resources>

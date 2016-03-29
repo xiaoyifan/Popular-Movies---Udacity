@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3d94d3</color>
     <color name="colorPrimaryDark">#3d94d3</color>
     <color name="colorAccent">#3d94d3</color>
+
+
+    <color name="theme_primary">@color/material_red600</color>
+    <color name="theme_primary_dark">@color/material_red800</color>
+    <color name="theme_primary_light">@color/material_red300</color>
 </resources>

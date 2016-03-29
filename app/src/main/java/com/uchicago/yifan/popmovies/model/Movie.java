@@ -13,12 +13,17 @@ public class Movie implements Serializable {
     private String releaseDate;
 
     private String imageUrl;
+    private String backdropUrl;
 
     public String getOriginalTitle(){
         return originalTitle;
     }
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public String getBackdropUrl(){
+        return backdropUrl;
     }
 
     public String getOverview(){
@@ -33,12 +38,13 @@ public class Movie implements Serializable {
         return userRating;
     }
 
-    public Movie(String originalTitle, String overview, double userRating, String releaseDate, String imageUrl) {
+    public Movie(String originalTitle, String overview, double userRating, String releaseDate, String imageUrl, String backdropUrl) {
         this.originalTitle = originalTitle;
         this.overview = overview;
         this.userRating = userRating;
         this.releaseDate = releaseDate;
         this.imageUrl = imageUrl;
+        this.backdropUrl = backdropUrl;
     }
 
 }

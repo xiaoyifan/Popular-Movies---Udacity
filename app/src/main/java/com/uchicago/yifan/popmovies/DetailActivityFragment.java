@@ -25,6 +25,7 @@ public class DetailActivityFragment extends Fragment {
     @Bind(R.id.movie_overview) TextView overviewText;
     @Bind(R.id.movie_rating) TextView ratingView;
     @Bind(R.id.movie_poster) ImageView imageView;
+    @Bind(R.id.detail_image) ImageView backdropView;
 
     public DetailActivityFragment() {
     }
@@ -60,7 +61,9 @@ public class DetailActivityFragment extends Fragment {
         ratingView.setText("Rating: "+selectedMovie.getUserRating()+"/10");
 
         String url = selectedMovie.getImageUrl();
+        String backdropUrl = selectedMovie.getBackdropUrl();
         Picasso.with(getContext()).load(url).placeholder(R.mipmap.grid_placeholder).into(imageView);
+        Picasso.with(getContext()).load(backdropUrl).into(backdropView);
 
     }
 }

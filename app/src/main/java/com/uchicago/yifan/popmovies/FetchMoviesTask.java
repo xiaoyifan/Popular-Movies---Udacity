@@ -138,7 +138,8 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
                                     values.getAsString(MovieContract.MovieEntry.COLUMN_OVERVIEW),
                     Double.parseDouble(values.getAsString(MovieContract.MovieEntry.COLUMN_RATING)),
                     values.getAsString(MovieContract.MovieEntry.COLUMN_DATE),
-                    values.getAsString(MovieContract.MovieEntry.COLUMN_IMAGE));
+                    values.getAsString(MovieContract.MovieEntry.COLUMN_IMAGE),
+                    values.getAsString(MovieContract.MovieEntry.COLUMN_IMAGE2));
             moviesList.add(movie);
         }
 
