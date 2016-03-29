@@ -22,18 +22,14 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop" />
 
-            <TextView
-                android:id="@+id/movie_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:padding="5dp"
-                android:layout_alignParentBottom="true"
-                android:textColor="@android:color/white"
-                android:background="#80000000" />
-
 
         </RelativeLayout>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/detail_summary_cardview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,8 +42,9 @@
                 android:layout_width="160dp"
                 android:layout_height="220dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:scaleType="centerCrop" />
 
             <LinearLayout
@@ -56,11 +53,22 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/movie_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/body_text_1"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:text="Jurassic Park" />
+
+                <TextView
                     android:id="@+id/movie_release_date"
                     android:fontFamily="sans-serif"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -70,7 +78,7 @@
                     android:fontFamily="sans-serif"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
                 />
@@ -90,19 +98,139 @@
 
         </LinearLayout>
 
+        </android.support.v7.widget.CardView>
 
-        <TextView
-            android:id="@+id/movie_overview"
-            android:fontFamily="sans-serif"
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.CardView
+            android:id="@+id/overview_cardview"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/movie_poster"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="20dp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/body_text_1"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:textSize="18sp"
+                    android:text="Overview"/>
 
 
+
+                <TextView
+                    android:id="@+id/movie_overview"
+                    android:fontFamily="sans-serif"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/movie_poster"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/detail_trailers_cardview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/body_text_1"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:textSize="18sp"
+                android:text="Trailers"/>
+
+
+                <!--put the trailer view code here-->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_marginTop="20dp">
+
+                    <com.linearlistview.LinearListView
+                        android:id="@+id/detail_trailers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:divider="?android:dividerHorizontal"
+                        android:showDividers="middle" />
+
+                </HorizontalScrollView>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/detail_reviews_cardview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/body_text_1"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:textSize="18sp"
+                    android:text="Reviews"/>
+
+
+
+                <com.linearlistview.LinearListView
+                    android:id="@+id/detail_reviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:divider="?android:dividerHorizontal"
+                    android:showDividers="middle" />
+
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 
