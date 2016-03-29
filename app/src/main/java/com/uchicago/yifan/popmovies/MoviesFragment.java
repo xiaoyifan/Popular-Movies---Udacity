@@ -68,13 +68,13 @@ public class MoviesFragment extends Fragment {
 
     public void updateData(){
 
-        FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity());
+        FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity(), this);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String value = preferences.getString("sortby", "popularity.desc");
         moviesTask.execute(value);
     }
 
-    private void setAdapter( final ArrayList<Movie> movieList )
+    public void setAdapter( final ArrayList<Movie> movieList )
     {
         GridView gridview = (GridView) getView().findViewById(R.id.gridview);
         gridview.setAdapter(new GridAdapter(getActivity(), movieList));

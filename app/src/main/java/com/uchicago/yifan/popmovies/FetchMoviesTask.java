@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.uchicago.yifan.popmovies.data.MovieContract;
+import com.uchicago.yifan.popmovies.model.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,24 +19,27 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
  * Created by Yifan on 3/27/16.
  */
 //Cite: the Async Task code in our Sunshine app in the tutorial: https://github.com/udacity/Sunshine-Version-2
-public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
+public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
 
     final String LOG_TAG = MoviesFragment.class.getSimpleName();
 
     private final Context mContext;
+    private final MoviesFragment fragment;
 
 
-    public FetchMoviesTask(Context context){
+    public FetchMoviesTask(Context context, MoviesFragment fragment){
         mContext = context;
+        this.fragment = fragment;
     }
 
-    public void createMovieListFromJson(String moviesJsonString) throws JSONException {
+    public ArrayList<Movie> createMovieListFromJson(String moviesJsonString) throws JSONException {
 
         JSONObject moviesJson = new JSONObject(moviesJsonString);
 
@@ -108,19 +112,42 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
             }
 
         Log.d(LOG_TAG, "FetchMoviesTask Complete. " + inserted + " Inserted");
+
+        ArrayList<Movie> movieArray = convertContentValuesToUXFormat(cVVector);
+
+        return movieArray;
+
         }
         catch (JSONException e){
-
+            Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
 
+        return null;
+    }
 
+    ArrayList<Movie> convertContentValuesToUXFormat(Vector<ContentValues> cvv)
+    {
+        ArrayList<Movie> moviesList = new ArrayList<Movie>(cvv.size());
+
+        for(int i = 0; i< cvv.size(); i++)
+        {
+            ContentValues values = cvv.elementAt(i);
+
+            Movie movie = new Movie(values.getAsString(MovieContract.MovieEntry.COLUMN_TITLE),
+                                    values.getAsString(MovieContract.MovieEntry.COLUMN_OVERVIEW),
+                    Double.parseDouble(values.getAsString(MovieContract.MovieEntry.COLUMN_RATING)),
+                    values.getAsString(MovieContract.MovieEntry.COLUMN_DATE),
+                    values.getAsString(MovieContract.MovieEntry.COLUMN_IMAGE));
+            moviesList.add(movie);
+        }
+
+        return moviesList;
     }
 
 
-
     @Override
-    protected Void doInBackground(String... params) {
+    protected ArrayList<Movie> doInBackground(String... params) {
 
         if (params.length == 0)
             return null;
@@ -171,8 +198,10 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
                 // Stream was empty.  No point in parsing.
             }
             moviesJsonStr = buffer.toString();
-            createMovieListFromJson(moviesJsonStr);
             Log.v("Result", moviesJsonStr);
+
+            return createMovieListFromJson(moviesJsonStr);
+
 
         }catch (IOException e) {
             Log.e("MovieFragment", "Error ", e);
@@ -199,6 +228,13 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
 
 
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList<Movie> movieList) {
+
+        fragment.setAdapter(movieList);
+
     }
 
 }

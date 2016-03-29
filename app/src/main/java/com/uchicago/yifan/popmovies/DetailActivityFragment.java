@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import com.uchicago.yifan.popmovies.model.Movie;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -24,28 +25,34 @@ public class DetailActivityFragment extends Fragment {
     @Bind(R.id.movie_overview) TextView overviewText;
     @Bind(R.id.movie_rating) TextView ratingView;
     @Bind(R.id.movie_poster) ImageView imageView;
+
     public DetailActivityFragment() {
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_detail, container, false);
+        ButterKnife.bind(this, view);
+        // TODO Use fields...
+        return view;
+    }
 
-        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         Intent intent = getActivity().getIntent();
 
         if (intent != null && intent.hasExtra(DetailActivity.EXTRA_MOVIE)) {
             Movie selectedMovie = (Movie) intent.getSerializableExtra(DetailActivity.EXTRA_MOVIE);
             if (selectedMovie != null) {
 
-                loadContentsIntoDetailView(selectedMovie, rootView);
+                loadContentsIntoDetailView(selectedMovie);
             }
         }
-
-        return rootView;
     }
 
-    private void loadContentsIntoDetailView(Movie selectedMovie, View rootView){
+    private void loadContentsIntoDetailView(Movie selectedMovie){
 
         titleView.setText(selectedMovie.getOriginalTitle());
         releaseView.setText(selectedMovie.getReleaseDate());

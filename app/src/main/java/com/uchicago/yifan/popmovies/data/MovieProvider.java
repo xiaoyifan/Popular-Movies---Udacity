@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
@@ -18,6 +19,21 @@ public class MovieProvider extends ContentProvider {
     private MovieDBHelper mOpenHelper;
 
     static final int MOVIE = 100;
+    static final int MOVIE_WITH_ID = 101;
+
+    private static final SQLiteQueryBuilder sMovieByIDQueryBuilder;
+
+
+    static{
+        sMovieByIDQueryBuilder = new SQLiteQueryBuilder();
+
+
+        sMovieByIDQueryBuilder.setTables(
+                MovieContract.MovieEntry.TABLE_NAME);
+    }
+
+    private static final String sMovieIDSelection = MovieContract.MovieEntry.TABLE_NAME +
+                                                    "." + MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ? ";
 
     static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -25,8 +41,21 @@ public class MovieProvider extends ContentProvider {
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, MovieContract.MOVIE_PATH, MOVIE);
+        matcher.addURI(authority, MovieContract.MOVIE_PATH + "/#", MOVIE_WITH_ID);
 
         return matcher;
+    }
+
+    private Cursor getMovieWithID(Uri uri, String[] projection, String sortOrder){
+        int movie_id = MovieContract.MovieEntry.getMovieIDFromUri(uri);
+
+        return sMovieByIDQueryBuilder.query(mOpenHelper.getWritableDatabase(),
+                                            projection,
+                                            sMovieIDSelection,
+                                            new String[]{Integer.toString(movie_id)},
+                                            null,
+                                            null,
+                                            sortOrder);
     }
 
 
@@ -48,6 +77,10 @@ public class MovieProvider extends ContentProvider {
                 retCursor = mOpenHelper.getReadableDatabase().query(MovieContract.MovieEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             }
+            case MOVIE_WITH_ID:{
+                retCursor = getMovieWithID(uri, projection, sortOrder);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown Uri: " + uri);
         }
@@ -66,6 +99,8 @@ public class MovieProvider extends ContentProvider {
         switch (match){
             case MOVIE:
                 return MovieContract.MovieEntry.CONTENT_TYPE;
+            case MOVIE_WITH_ID:
+                return MovieContract.MovieEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown Uri: " + uri);
         }
