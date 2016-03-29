@@ -1,4 +1,4 @@
-package com.uchicago.yifan.popmovies;
+package com.uchicago.yifan.popmovies.network;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.uchicago.yifan.popmovies.Constants;
+import com.uchicago.yifan.popmovies.MoviesFragment;
 import com.uchicago.yifan.popmovies.data.MovieContract;
 import com.uchicago.yifan.popmovies.model.Movie;
 
