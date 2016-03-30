@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.uchicago.yifan.popmovies.Constants;
 import com.uchicago.yifan.popmovies.DetailActivityFragment;
-import com.uchicago.yifan.popmovies.model.Trailer;
+import com.uchicago.yifan.popmovies.model.Review;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,38 +24,33 @@ import java.util.List;
 /**
  * Created by Yifan on 3/29/16.
  */
-public class FetchTrailersTask extends AsyncTask<String, Void, List<Trailer>> {
+public class FetchReviewsTask extends AsyncTask<String, Void, List<Review>> {
 
-    private final String LOG_TAG = FetchTrailersTask.class.getSimpleName();
+    private final String LOG_TAG = FetchReviewsTask.class.getSimpleName();
 
-    private DetailActivityFragment detail_fragment;
+    DetailActivityFragment detail_fragment;
 
-    public FetchTrailersTask(DetailActivityFragment fragment){
-            detail_fragment = fragment;
+
+    public FetchReviewsTask(DetailActivityFragment fragment){
+        detail_fragment = fragment;
     }
 
+    private List<Review> getReviewsDataFromJson(String jsonStr) throws JSONException {
+        JSONObject reviewJson = new JSONObject(jsonStr);
+        JSONArray reviewArray = reviewJson.getJSONArray("results");
 
+        List<Review> results = new ArrayList<>();
 
-    private List<Trailer> getTrailersDataFromJson(String jsonStr) throws JSONException {
-        JSONObject trailerJson = new JSONObject(jsonStr);
-        JSONArray trailerArray = trailerJson.getJSONArray("results");
-
-        List<Trailer> results = new ArrayList<>();
-
-        for(int i = 0; i < trailerArray.length(); i++) {
-            JSONObject trailer = trailerArray.getJSONObject(i);
-            // Only show Trailers which are on Youtube
-            if (trailer.getString("site").contentEquals("YouTube")) {
-                Trailer trailerModel = new Trailer(trailer);
-                results.add(trailerModel);
-            }
+        for (int i = 0; i < reviewArray.length(); i++) {
+            JSONObject review = reviewArray.getJSONObject(i);
+            results.add(new Review(review));
         }
 
         return results;
     }
 
     @Override
-    protected List<Trailer> doInBackground(String... params) {
+    protected List<Review> doInBackground(String... params) {
 
         if (params.length == 0) {
             return null;
@@ -67,7 +62,7 @@ public class FetchTrailersTask extends AsyncTask<String, Void, List<Trailer>> {
         String jsonStr = null;
 
         try {
-            final String BASE_URL = "http://api.themoviedb.org/3/movie/" + params[0] + "/videos";
+            final String BASE_URL = "http://api.themoviedb.org/3/movie/" + params[0] + "/reviews";
             final String API_KEY_PARAM = "api_key";
 
             Uri builtUri = Uri.parse(BASE_URL).buildUpon()
@@ -116,7 +111,7 @@ public class FetchTrailersTask extends AsyncTask<String, Void, List<Trailer>> {
         }
 
         try {
-            return getTrailersDataFromJson(jsonStr);
+            return getReviewsDataFromJson(jsonStr);
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
@@ -127,8 +122,8 @@ public class FetchTrailersTask extends AsyncTask<String, Void, List<Trailer>> {
     }
 
     @Override
-    protected void onPostExecute(List<Trailer> trailers) {
+    protected void onPostExecute(List<Review> reviews) {
 
-        detail_fragment.setTrailerAdapter((ArrayList<Trailer>) trailers);
+        detail_fragment.setReviewsAdapter((ArrayList<Review>) reviews);
     }
 }

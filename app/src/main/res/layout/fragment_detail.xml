@@ -14,7 +14,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp">
+            android:layout_height="220dp">
 
             <ImageView
                 android:id="@+id/detail_image"
@@ -120,8 +120,6 @@
                     android:textColor="@color/body_text_1"
                     android:fontFamily="sans-serif"
                     android:layout_marginTop="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
                     android:textSize="18sp"
                     android:text="Overview"/>
 
@@ -134,8 +132,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/movie_poster"
                     android:textSize="15sp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -147,7 +143,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/detail_trailers_cardview"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp">
@@ -164,8 +160,6 @@
                 android:textColor="@color/body_text_1"
                 android:fontFamily="sans-serif"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="10dp"
                 android:textSize="18sp"
                 android:text="Trailers"/>
 
@@ -173,8 +167,9 @@
                 <!--put the trailer view code here-->
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:layout_marginTop="20dp">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
 
                     <com.linearlistview.LinearListView
                         android:id="@+id/detail_trailers"
@@ -194,10 +189,11 @@
         <android.support.v7.widget.CardView
             android:id="@+id/detail_reviews_cardview"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -211,8 +207,7 @@
                     android:textColor="@color/body_text_1"
                     android:fontFamily="sans-serif"
                     android:layout_marginTop="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
                     android:textSize="18sp"
                     android:text="Reviews"/>
 

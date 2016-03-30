@@ -136,7 +136,8 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
         {
             ContentValues values = cvv.elementAt(i);
 
-            Movie movie = new Movie(values.getAsString(MovieContract.MovieEntry.COLUMN_TITLE),
+            Movie movie = new Movie(values.getAsInteger(MovieContract.MovieEntry.COLUMN_MOVIE_ID),
+                                    values.getAsString(MovieContract.MovieEntry.COLUMN_TITLE),
                                     values.getAsString(MovieContract.MovieEntry.COLUMN_OVERVIEW),
                     Double.parseDouble(values.getAsString(MovieContract.MovieEntry.COLUMN_RATING)),
                     values.getAsString(MovieContract.MovieEntry.COLUMN_DATE),

@@ -1,6 +1,7 @@
 package com.uchicago.yifan.popmovies;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
@@ -12,8 +13,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.linearlistview.LinearListView;
 import com.squareup.picasso.Picasso;
+import com.uchicago.yifan.popmovies.adapter.ReviewAdapter;
+import com.uchicago.yifan.popmovies.adapter.TrailerAdapter;
 import com.uchicago.yifan.popmovies.model.Movie;
+import com.uchicago.yifan.popmovies.model.Review;
+import com.uchicago.yifan.popmovies.model.Trailer;
+import com.uchicago.yifan.popmovies.network.FetchReviewsTask;
+import com.uchicago.yifan.popmovies.network.FetchTrailersTask;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,6 +43,14 @@ public class DetailActivityFragment extends Fragment {
 
     private Toast mToast;
 
+    private Movie selectedMovie;
+
+    private LinearListView mTrailersView;
+    private LinearListView mReviewsView;
+
+    private TrailerAdapter mTrailerAdapter;
+    private ReviewAdapter mReviewAdapter;
+
     public DetailActivityFragment() {
     }
 
@@ -40,6 +58,10 @@ public class DetailActivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, view);
         // TODO Use fields...
+
+        mTrailersView = (LinearListView) view.findViewById(R.id.detail_trailers);
+        mReviewsView = (LinearListView) view.findViewById(R.id.detail_reviews);
+
         return view;
     }
 
@@ -51,7 +73,7 @@ public class DetailActivityFragment extends Fragment {
         Intent intent = getActivity().getIntent();
 
         if (intent != null && intent.hasExtra(DetailActivity.EXTRA_MOVIE)) {
-            Movie selectedMovie = (Movie) intent.getSerializableExtra(DetailActivity.EXTRA_MOVIE);
+            selectedMovie = (Movie) intent.getSerializableExtra(DetailActivity.EXTRA_MOVIE);
             if (selectedMovie != null) {
 
                 loadContentsIntoDetailView(selectedMovie);
@@ -59,11 +81,20 @@ public class DetailActivityFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        String id = Integer.toString(selectedMovie.getId());
+        new FetchTrailersTask(this).execute(Integer.toString(selectedMovie.getId()));
+        new FetchReviewsTask(this).execute(Integer.toString(selectedMovie.getId()));
+    }
+
     @OnClick(R.id.movie_favorite_button)
     public void onFavored(ImageButton button) {
 //        if (mMovie == null) return;
 //
-//        boolean favored = !mMovie.isFavored();
+//        boolean favored = !selectedMovie.isFavored();
 //        button.setSelected(favored);
 //        mHelper.setMovieFavored(mMovie, favored);
         showToast(R.string.message_movie_favored);
@@ -88,4 +119,31 @@ public class DetailActivityFragment extends Fragment {
         Picasso.with(getContext()).load(backdropUrl).into(backdropView);
 
     }
+
+    public void setTrailerAdapter(ArrayList<Trailer> trailerArrayList){
+
+        LinearListView trailerListView = (LinearListView) getView().findViewById(R.id.detail_trailers);
+
+        mTrailerAdapter = new TrailerAdapter(getActivity(), trailerArrayList);
+        trailerListView.setAdapter(mTrailerAdapter);
+
+        trailerListView.setOnItemClickListener(new LinearListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(LinearListView parent, View view, int position, long id) {
+                Trailer trailer = mTrailerAdapter.getItem(position);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("http://www.youtube.com/watch?v=" + trailer.getKey()));
+                startActivity(intent);
+            }
+
+        });
+    }
+
+    public void setReviewsAdapter(ArrayList<Review> reviewArrayList){
+        LinearListView reviewsListView = (LinearListView) getView().findViewById(R.id.detail_reviews);
+        reviewsListView.setAdapter(new ReviewAdapter(getActivity(), reviewArrayList));
+
+    }
+
+
 }

@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class Movie implements Serializable {
 
+    private int id;
     private String originalTitle;
     private String overview;
     private double userRating;
@@ -38,7 +39,12 @@ public class Movie implements Serializable {
         return userRating;
     }
 
-    public Movie(String originalTitle, String overview, double userRating, String releaseDate, String imageUrl, String backdropUrl) {
+    public int getId(){
+        return id;
+    }
+
+    public Movie(int id, String originalTitle, String overview, double userRating, String releaseDate, String imageUrl, String backdropUrl) {
+        this.id = id;
         this.originalTitle = originalTitle;
         this.overview = overview;
         this.userRating = userRating;
