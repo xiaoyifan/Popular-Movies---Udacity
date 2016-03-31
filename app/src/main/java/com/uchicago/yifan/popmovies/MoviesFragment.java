@@ -16,7 +16,7 @@ import android.widget.GridView;
 
 import com.uchicago.yifan.popmovies.adapter.GridAdapter;
 import com.uchicago.yifan.popmovies.model.Movie;
-import com.uchicago.yifan.popmovies.network.FetchMoviesTask;
+import com.uchicago.yifan.popmovies.queries.FetchMoviesTask;
 
 import java.util.ArrayList;
 

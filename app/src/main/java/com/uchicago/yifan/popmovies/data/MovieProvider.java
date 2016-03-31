@@ -1,6 +1,7 @@
 package com.uchicago.yifan.popmovies.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -8,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 /**
  * Created by Yifan on 3/27/16.
@@ -177,10 +179,25 @@ public class MovieProvider extends ContentProvider {
         if (selection == null) selection = "1";
         switch (sUriMatcher.match(uri))
         {
-            case MOVIE:
+            case MOVIE:{
                 rowsDeleted = db.delete(
                         MovieContract.MovieEntry.TABLE_NAME, selection, selectionArgs);
                 break;
+            }
+            case MOVIE_WITH_ID:{
+                rowsDeleted = db.delete(MovieContract.MovieEntry.TABLE_NAME,
+                        MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?", new String[]{String.valueOf(ContentUris.parseId(uri))});
+
+                Log.d("DELETE: ", "movie " + String.valueOf(ContentUris.parseId(uri)) + " is deleted");
+
+                int fav = getContext().getContentResolver().query(
+                        MovieContract.MovieEntry.CONTENT_URI,
+                        null, null, null, null).getCount();
+
+                Log.d("SUM: ", "There're " + fav + " movies.");
+
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

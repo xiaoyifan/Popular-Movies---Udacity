@@ -1,4 +1,4 @@
-package com.uchicago.yifan.popmovies.network;
+package com.uchicago.yifan.popmovies.queries;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -61,6 +61,8 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
 
     try {
 
+//        int deleted = mContext.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
+//        Log.d(LOG_TAG, "Previous data wiping Complete. " + deleted + " Deleted");
 
         Vector<ContentValues> cVVector = new Vector<ContentValues>(moviesArray.length());
 
@@ -106,12 +108,12 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
 
             int inserted = 0;
 
-            if  (cVVector.size() > 0) {
-            ContentValues[] cvArray = new ContentValues[cVVector.size()];
-            cVVector.toArray(cvArray);
-
-            inserted = mContext.getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
-            }
+//            if  (cVVector.size() > 0) {
+//            ContentValues[] cvArray = new ContentValues[cVVector.size()];
+//            cVVector.toArray(cvArray);
+//
+//            inserted = mContext.getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
+//            }
 
         Log.d(LOG_TAG, "FetchMoviesTask Complete. " + inserted + " Inserted");
 

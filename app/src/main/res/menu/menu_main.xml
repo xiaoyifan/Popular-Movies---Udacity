@@ -10,4 +10,8 @@
         android:id="@+id/action_refresh"
         android:title="Refresh"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_favorite"
+        android:title="Favorites"
+        app:showAsAction="never" />
 </menu>

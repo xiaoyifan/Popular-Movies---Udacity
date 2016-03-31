@@ -1,5 +1,6 @@
 package com.uchicago.yifan.popmovies;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,11 +18,12 @@ import com.linearlistview.LinearListView;
 import com.squareup.picasso.Picasso;
 import com.uchicago.yifan.popmovies.adapter.ReviewAdapter;
 import com.uchicago.yifan.popmovies.adapter.TrailerAdapter;
+import com.uchicago.yifan.popmovies.data.MovieContract;
 import com.uchicago.yifan.popmovies.model.Movie;
 import com.uchicago.yifan.popmovies.model.Review;
 import com.uchicago.yifan.popmovies.model.Trailer;
-import com.uchicago.yifan.popmovies.network.FetchReviewsTask;
-import com.uchicago.yifan.popmovies.network.FetchTrailersTask;
+import com.uchicago.yifan.popmovies.queries.FetchReviewsTask;
+import com.uchicago.yifan.popmovies.queries.FetchTrailersTask;
 
 import java.util.ArrayList;
 
@@ -40,6 +42,27 @@ public class DetailActivityFragment extends Fragment {
     @Bind(R.id.movie_rating) TextView ratingView;
     @Bind(R.id.movie_poster) ImageView imageView;
     @Bind(R.id.detail_image) ImageView backdropView;
+    @Bind(R.id.movie_favorite_button) ImageButton button;
+
+    public static final String[] MOVIE_COLUMNS = {
+            MovieContract.MovieEntry._ID,
+            MovieContract.MovieEntry.COLUMN_MOVIE_ID,
+            MovieContract.MovieEntry.COLUMN_TITLE,
+            MovieContract.MovieEntry.COLUMN_IMAGE,
+            MovieContract.MovieEntry.COLUMN_IMAGE2,
+            MovieContract.MovieEntry.COLUMN_OVERVIEW,
+            MovieContract.MovieEntry.COLUMN_RATING,
+            MovieContract.MovieEntry.COLUMN_DATE
+    };
+
+    public static final int COL_ID = 0;
+    public static final int COL_MOVIE_ID = 1;
+    public static final int COL_TITLE = 2;
+    public static final int COL_IMAGE = 3;
+    public static final int COL_IMAGE2 = 4;
+    public static final int COL_OVERVIEW = 5;
+    public static final int COL_RATING = 6;
+    public static final int COL_DATE = 7;
 
     private Toast mToast;
 
@@ -50,6 +73,8 @@ public class DetailActivityFragment extends Fragment {
 
     private TrailerAdapter mTrailerAdapter;
     private ReviewAdapter mReviewAdapter;
+
+    private boolean favored;
 
     public DetailActivityFragment() {
     }
@@ -92,12 +117,33 @@ public class DetailActivityFragment extends Fragment {
 
     @OnClick(R.id.movie_favorite_button)
     public void onFavored(ImageButton button) {
-//        if (mMovie == null) return;
-//
+        if (selectedMovie == null) return;
+
+        favored = !favored;
 //        boolean favored = !selectedMovie.isFavored();
-//        button.setSelected(favored);
-//        mHelper.setMovieFavored(mMovie, favored);
+        button.setSelected(favored);
+        setMovieFavored(selectedMovie, favored);
+
         showToast(R.string.message_movie_favored);
+    }
+
+    private void setMovieFavored(Movie movie, boolean favored){
+
+        if (favored){
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movie.getId());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getOriginalTitle());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_RATING, movie.getUserRating());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_DATE, movie.getReleaseDate());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_IMAGE, movie.getImageUrl());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_IMAGE2, movie.getBackdropUrl());
+            getContext().getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+        }
+        else {
+            getContext().getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(movie.getId()), null, null);
+        }
     }
 
     protected void showToast(@StringRes int resId) {
@@ -112,6 +158,16 @@ public class DetailActivityFragment extends Fragment {
         releaseView.setText(selectedMovie.getReleaseDate());
         overviewText.setText(selectedMovie.getOverview());
         ratingView.setText("Rating: "+selectedMovie.getUserRating()+"/10");
+
+        int fav = getContext().getContentResolver().query(
+                MovieContract.MovieEntry.buildMovieUri(selectedMovie.getId()),
+                null, null, null, null).getCount();
+
+        favored = false;
+        if (fav == 1){
+                favored = true;
+        }
+        button.setSelected(true);
 
         String url = selectedMovie.getImageUrl();
         String backdropUrl = selectedMovie.getBackdropUrl();

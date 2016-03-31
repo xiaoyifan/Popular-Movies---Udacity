@@ -1,5 +1,9 @@
 package com.uchicago.yifan.popmovies.model;
 
+import android.database.Cursor;
+
+import com.uchicago.yifan.popmovies.DetailActivityFragment;
+
 import java.io.Serializable;
 
 /**
@@ -51,6 +55,16 @@ public class Movie implements Serializable {
         this.releaseDate = releaseDate;
         this.imageUrl = imageUrl;
         this.backdropUrl = backdropUrl;
+    }
+
+    public Movie(Cursor cursor){
+        this.id = cursor.getInt(DetailActivityFragment.COL_MOVIE_ID);
+        this.originalTitle = cursor.getString(DetailActivityFragment.COL_TITLE);
+        this.overview = cursor.getString(DetailActivityFragment.COL_OVERVIEW);
+        this.userRating = cursor.getDouble(DetailActivityFragment.COL_RATING);
+        this.releaseDate = cursor.getString(DetailActivityFragment.COL_DATE);
+        this.imageUrl = cursor.getString(DetailActivityFragment.COL_IMAGE);
+        this.backdropUrl = cursor.getString(DetailActivityFragment.COL_IMAGE2);
     }
 
 }
