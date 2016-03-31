@@ -16,6 +16,7 @@ import android.widget.GridView;
 
 import com.uchicago.yifan.popmovies.adapter.GridAdapter;
 import com.uchicago.yifan.popmovies.model.Movie;
+import com.uchicago.yifan.popmovies.queries.FetchFavoriteMoviesTask;
 import com.uchicago.yifan.popmovies.queries.FetchMoviesTask;
 
 import java.util.ArrayList;
@@ -28,6 +29,12 @@ public class MoviesFragment extends Fragment {
     private GridAdapter adapter;
 
     public MoviesFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -52,7 +59,7 @@ public class MoviesFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_detail, menu);
     }
 
     @Override
@@ -62,10 +69,13 @@ public class MoviesFragment extends Fragment {
             updateData();
             return true;
         }
+        else if (id == R.id.action_favorite){
+            loadFavorites();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
-
 
     public void updateData(){
 
@@ -73,6 +83,12 @@ public class MoviesFragment extends Fragment {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String value = preferences.getString("sortby", "popularity.desc");
         moviesTask.execute(value);
+
+    }
+
+    public void loadFavorites(){
+        FetchFavoriteMoviesTask task = new FetchFavoriteMoviesTask(getActivity(), this);
+        task.execute();
     }
 
     public void setAdapter( final ArrayList<Movie> movieList )

@@ -3,8 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.uchicago.yifan.popmovies.DetailActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:id="@+id/action_refresh"
+        android:title="Refresh"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_favorite"
+        android:title="Favorites"
         app:showAsAction="never" />
 </menu>
