@@ -167,7 +167,7 @@ public class DetailActivityFragment extends Fragment {
         if (fav == 1){
                 favored = true;
         }
-        button.setSelected(true);
+        button.setSelected(favored);
 
         String url = selectedMovie.getImageUrl();
         String backdropUrl = selectedMovie.getBackdropUrl();
