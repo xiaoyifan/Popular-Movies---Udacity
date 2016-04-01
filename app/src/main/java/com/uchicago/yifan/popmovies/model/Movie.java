@@ -1,3 +1,4 @@
+//Cite: https://github.com/ismaeltoe/Popular-Movies-App/blob/master/app/src/main/java/com/github/ismaeltoe/movies/model/Movie.java
 package com.uchicago.yifan.popmovies.model;
 
 import android.database.Cursor;
