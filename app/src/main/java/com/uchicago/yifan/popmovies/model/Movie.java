@@ -15,7 +15,7 @@ public class Movie implements Parcelable {
     private int id;
     private String originalTitle;
     private String overview;
-    private double userRating;
+    private String userRating;
     private String releaseDate;
 
     private String imageUrl;
@@ -40,7 +40,7 @@ public class Movie implements Parcelable {
         return releaseDate;
     }
 
-    public double getUserRating(){
+    public String getUserRating(){
         return userRating;
     }
 
@@ -48,7 +48,7 @@ public class Movie implements Parcelable {
         return id;
     }
 
-    public Movie(int id, String originalTitle, String overview, double userRating, String releaseDate, String imageUrl, String backdropUrl) {
+    public Movie(int id, String originalTitle, String overview, String userRating, String releaseDate, String imageUrl, String backdropUrl) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.overview = overview;
@@ -59,10 +59,13 @@ public class Movie implements Parcelable {
     }
 
     public Movie(Cursor cursor){
+
+        String id = cursor.getString(DetailActivityFragment.COL_MOVIE_ID);
+
         this.id = cursor.getInt(DetailActivityFragment.COL_MOVIE_ID);
         this.originalTitle = cursor.getString(DetailActivityFragment.COL_TITLE);
         this.overview = cursor.getString(DetailActivityFragment.COL_OVERVIEW);
-        this.userRating = cursor.getDouble(DetailActivityFragment.COL_RATING);
+        this.userRating = cursor.getString(DetailActivityFragment.COL_RATING);
         this.releaseDate = cursor.getString(DetailActivityFragment.COL_DATE);
         this.imageUrl = cursor.getString(DetailActivityFragment.COL_IMAGE);
         this.backdropUrl = cursor.getString(DetailActivityFragment.COL_IMAGE2);
@@ -92,7 +95,7 @@ public class Movie implements Parcelable {
         dest.writeString(imageUrl);
         dest.writeString(backdropUrl);
         dest.writeString(overview);
-        dest.writeDouble(userRating);
+        dest.writeString(userRating);
         dest.writeString(releaseDate);
     }
 
@@ -102,7 +105,7 @@ public class Movie implements Parcelable {
         imageUrl = in.readString();
         backdropUrl = in.readString();
         overview = in.readString();
-        userRating = in.readDouble();
+        userRating = in.readString();
         releaseDate = in.readString();
     }
 }
