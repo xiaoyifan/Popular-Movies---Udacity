@@ -32,11 +32,11 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment umoviesing a
             // fragment transaction.
-            if (savedInstanceState == null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.movie_detail_container, new DetailActivityFragment(), DETAILFRAGMENT_TAG)
-                        .commit();
-            }
+//            if (savedInstanceState == null) {
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.movie_detail_container, new DetailActivityFragment(), DETAILFRAGMENT_TAG)
+//                        .commit();
+//            }
         } else {
             mTwoPane = false;
         }
@@ -74,9 +74,9 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
             DetailActivityFragment fragment = new DetailActivityFragment();
             fragment.setArguments(arguments);
 
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.movie_detail_container, fragment, DETAILFRAGMENT_TAG)
-                    .commit();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.movie_detail_container, fragment, DETAILFRAGMENT_TAG)
+                        .commit();
         } else {
             Intent intent = new Intent(this, DetailActivity.class)
                     .putExtra(DetailActivityFragment.DETAIL_URI, movie);
