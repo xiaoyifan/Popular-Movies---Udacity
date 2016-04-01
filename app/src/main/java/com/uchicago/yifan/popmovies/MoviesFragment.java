@@ -1,6 +1,5 @@
 package com.uchicago.yifan.popmovies;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -27,6 +26,13 @@ import java.util.ArrayList;
 public class MoviesFragment extends Fragment {
 
     private GridAdapter adapter;
+
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(Movie movie);
+    }
 
     public MoviesFragment() {
     }
@@ -99,13 +105,21 @@ public class MoviesFragment extends Fragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Movie selectedMovie = movieList.get(position);
-                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
-                detailIntent.putExtra(DetailActivity.EXTRA_MOVIE, selectedMovie);
-                startActivity(detailIntent);
+//                Movie selectedMovie = movieList.get(position);
+//                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+//                detailIntent.putExtra(DetailActivity.EXTRA_MOVIE, selectedMovie);
+//                startActivity(detailIntent);
+
+                Movie movie = (Movie) parent.getItemAtPosition(position);
+                if (movie != null) {
+                    ((Callback) getActivity())
+                            .onItemSelected(movie);
+                }
             }
         });
 
     }
+
+
 
 }

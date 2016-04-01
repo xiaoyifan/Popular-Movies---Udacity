@@ -5,14 +5,14 @@
     android:baselineAligned="false"
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
-    tools:context="com.example.android.sunshine.app.MainActivity">
+    tools:context="com.uchicago.yifan.popmovies.MainActivity">
 
     <!--
     This layout is a two-pane layout for the Items master/detail flow.
     -->
 
     <fragment
-        android:id="@+id/fragment_forecast"
+        android:id="@+id/fragment_main"
         android:name="com.uchicago.yifan.popmovies.MoviesFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -20,7 +20,7 @@
         tools:layout="@android:layout/list_content" />
 
     <FrameLayout
-        android:id="@+id/weather_detail_container"
+        android:id="@+id/movie_detail_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="4" />

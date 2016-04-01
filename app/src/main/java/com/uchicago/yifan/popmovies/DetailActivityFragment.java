@@ -76,6 +76,8 @@ public class DetailActivityFragment extends Fragment {
 
     private boolean favored;
 
+    public static final String DETAIL_URI = "detail_uri";
+
     public DetailActivityFragment() {
     }
 
@@ -87,6 +89,13 @@ public class DetailActivityFragment extends Fragment {
         mTrailersView = (LinearListView) view.findViewById(R.id.detail_trailers);
         mReviewsView = (LinearListView) view.findViewById(R.id.detail_reviews);
 
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            selectedMovie = arguments.getParcelable(DetailActivityFragment.DETAIL_URI);
+
+        }
+
         return view;
     }
 
@@ -97,22 +106,21 @@ public class DetailActivityFragment extends Fragment {
 
         Intent intent = getActivity().getIntent();
 
-        if (intent != null && intent.hasExtra(DetailActivity.EXTRA_MOVIE)) {
-            selectedMovie = (Movie) intent.getSerializableExtra(DetailActivity.EXTRA_MOVIE);
             if (selectedMovie != null) {
 
                 loadContentsIntoDetailView(selectedMovie);
             }
-        }
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        String id = Integer.toString(selectedMovie.getId());
-        new FetchTrailersTask(this).execute(Integer.toString(selectedMovie.getId()));
-        new FetchReviewsTask(this).execute(Integer.toString(selectedMovie.getId()));
+        if (selectedMovie != null) {
+            String id = Integer.toString(selectedMovie.getId());
+            new FetchTrailersTask(this).execute(Integer.toString(selectedMovie.getId()));
+            new FetchReviewsTask(this).execute(Integer.toString(selectedMovie.getId()));
+        }
     }
 
     @OnClick(R.id.movie_favorite_button)

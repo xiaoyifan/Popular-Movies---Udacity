@@ -1,15 +1,15 @@
 package com.uchicago.yifan.popmovies.model;
 
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.uchicago.yifan.popmovies.DetailActivityFragment;
-
-import java.io.Serializable;
 
 /**
  * Created by Yifan on 2/24/16.
  */
-public class Movie implements Serializable {
+public class Movie implements Parcelable {
 
     private int id;
     private String originalTitle;
@@ -67,4 +67,41 @@ public class Movie implements Serializable {
         this.backdropUrl = cursor.getString(DetailActivityFragment.COL_IMAGE2);
     }
 
+    public static final Parcelable.Creator<Movie> CREATOR
+            = new Parcelable.Creator<Movie>() {
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeInt(id);
+        dest.writeString(originalTitle);
+        dest.writeString(imageUrl);
+        dest.writeString(backdropUrl);
+        dest.writeString(overview);
+        dest.writeDouble(userRating);
+        dest.writeString(releaseDate);
+    }
+
+    private Movie(Parcel in) {
+        id = in.readInt();
+        originalTitle = in.readString();
+        imageUrl = in.readString();
+        backdropUrl = in.readString();
+        overview = in.readString();
+        userRating = in.readInt();
+        releaseDate = in.readString();
+    }
 }
