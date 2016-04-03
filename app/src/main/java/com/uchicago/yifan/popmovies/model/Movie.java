@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.uchicago.yifan.popmovies.DetailActivityFragment;
+import com.uchicago.yifan.popmovies.MoviesFragment;
 
 /**
  * Created by Yifan on 2/24/16.
@@ -60,15 +60,15 @@ public class Movie implements Parcelable {
 
     public Movie(Cursor cursor){
 
-        String id = cursor.getString(DetailActivityFragment.COL_MOVIE_ID);
+        String id = cursor.getString(MoviesFragment.COL_MOVIE_ID);
 
-        this.id = cursor.getInt(DetailActivityFragment.COL_MOVIE_ID);
-        this.originalTitle = cursor.getString(DetailActivityFragment.COL_TITLE);
-        this.overview = cursor.getString(DetailActivityFragment.COL_OVERVIEW);
-        this.userRating = cursor.getString(DetailActivityFragment.COL_RATING);
-        this.releaseDate = cursor.getString(DetailActivityFragment.COL_DATE);
-        this.imageUrl = cursor.getString(DetailActivityFragment.COL_IMAGE);
-        this.backdropUrl = cursor.getString(DetailActivityFragment.COL_IMAGE2);
+        this.id = cursor.getInt(MoviesFragment.COL_MOVIE_ID);
+        this.originalTitle = cursor.getString(MoviesFragment.COL_TITLE);
+        this.overview = cursor.getString(MoviesFragment.COL_OVERVIEW);
+        this.userRating = cursor.getString(MoviesFragment.COL_RATING);
+        this.releaseDate = cursor.getString(MoviesFragment.COL_DATE);
+        this.imageUrl = cursor.getString(MoviesFragment.COL_IMAGE);
+        this.backdropUrl = cursor.getString(MoviesFragment.COL_IMAGE2);
     }
 
     public static final Parcelable.Creator<Movie> CREATOR

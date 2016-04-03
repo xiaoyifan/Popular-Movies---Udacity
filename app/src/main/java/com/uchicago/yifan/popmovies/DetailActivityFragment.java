@@ -44,25 +44,6 @@ public class DetailActivityFragment extends Fragment {
     @Bind(R.id.detail_image) ImageView backdropView;
     @Bind(R.id.movie_favorite_button) ImageButton button;
 
-    public static final String[] MOVIE_COLUMNS = {
-            MovieContract.MovieEntry._ID,
-            MovieContract.MovieEntry.COLUMN_MOVIE_ID,
-            MovieContract.MovieEntry.COLUMN_TITLE,
-            MovieContract.MovieEntry.COLUMN_IMAGE,
-            MovieContract.MovieEntry.COLUMN_IMAGE2,
-            MovieContract.MovieEntry.COLUMN_OVERVIEW,
-            MovieContract.MovieEntry.COLUMN_RATING,
-            MovieContract.MovieEntry.COLUMN_DATE
-    };
-
-    public static final int COL_ID = 0;
-    public static final int COL_MOVIE_ID = 1;
-    public static final int COL_TITLE = 2;
-    public static final int COL_IMAGE = 3;
-    public static final int COL_IMAGE2 = 4;
-    public static final int COL_OVERVIEW = 5;
-    public static final int COL_RATING = 6;
-    public static final int COL_DATE = 7;
 
     private Toast mToast;
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 
-import com.uchicago.yifan.popmovies.DetailActivityFragment;
 import com.uchicago.yifan.popmovies.MoviesFragment;
 import com.uchicago.yifan.popmovies.data.MovieContract;
 import com.uchicago.yifan.popmovies.model.Movie;
@@ -29,7 +28,7 @@ public class FetchFavoriteMoviesTask extends AsyncTask<Void, Void, List<Movie>> 
     protected List<Movie> doInBackground(Void... params) {
         Cursor cursor = mContext.getContentResolver().query(
                 MovieContract.MovieEntry.CONTENT_URI,
-                DetailActivityFragment.MOVIE_COLUMNS,
+                MoviesFragment.MOVIE_COLUMNS,
                 null,
                 null,
                 null

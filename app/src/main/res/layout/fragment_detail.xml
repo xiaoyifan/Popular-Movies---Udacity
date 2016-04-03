@@ -6,7 +6,8 @@
     android:id="@+id/detail_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.DetailActivityFragment">
+    tools:context=".view.DetailActivityFragment"
+    android:background="@color/colorYellowLight">
 
     <LinearLayout
         android:orientation="vertical"

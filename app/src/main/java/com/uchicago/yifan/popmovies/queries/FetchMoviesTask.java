@@ -236,11 +236,11 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
         return null;
     }
 
-    @Override
-    protected void onPostExecute(ArrayList<Movie> movieList) {
-
-        fragment.setAdapter(movieList);
-
-    }
+//    @Override
+//    protected void onPostExecute(ArrayList<Movie> movieList) {
+//
+//        fragment.setAdapter(movieList);
+//
+//    }
 
 }

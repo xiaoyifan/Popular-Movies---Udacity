@@ -1,13 +1,15 @@
 package com.uchicago.yifan.popmovies.adapter;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.uchicago.yifan.popmovies.MoviesFragment;
 import com.uchicago.yifan.popmovies.R;
 import com.uchicago.yifan.popmovies.model.Movie;
 
@@ -16,41 +18,29 @@ import java.util.ArrayList;
 /**
  * Created by Yifan on 2/24/16.
  */
-public class GridAdapter extends BaseAdapter {
+public class GridAdapter extends CursorAdapter {
 
     private Context context;
     private ArrayList<Movie> movieList;
 
-    public GridAdapter(Context context, ArrayList<Movie> movieList) {
+    public GridAdapter(Context context, Cursor c, int flags) {
+        super(context, c, flags);
         this.context = context;
-        this.movieList = movieList;
     }
 
     @Override
-    public int getCount() {
-        return movieList.size();
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_movie, parent, false);
+        return view;
     }
 
     @Override
-    public Movie getItem(int position) {
-        return movieList.get(position);
-    }
+    public void bindView(View view, Context context, Cursor cursor) {
 
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.list_item_movie, parent, false);
-        }
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_movie_imageview);
-
-        Movie movie = getItem(position);
-        String url = movie.getImageUrl();
+        String url = cursor.getString(MoviesFragment.COL_IMAGE);
+        ImageView imageView = (ImageView) view.findViewById(R.id.list_item_movie_imageview);
         Picasso.with(context).load(url).placeholder(R.mipmap.grid_placeholder).into(imageView);
-        return imageView;
     }
+
 }
