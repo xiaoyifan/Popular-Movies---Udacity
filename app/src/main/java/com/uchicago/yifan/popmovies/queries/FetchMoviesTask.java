@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.uchicago.yifan.popmovies.Constants;
+import com.uchicago.yifan.popmovies.BuildConfig;
 import com.uchicago.yifan.popmovies.MoviesFragment;
 import com.uchicago.yifan.popmovies.data.MovieContract;
 
@@ -148,7 +148,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
 
             Uri queryUri = Uri.parse(baseUrl).buildUpon()
                     .appendQueryParameter(SORT_PARAM, params[0])
-                    .appendQueryParameter(API_KEY, Constants.API_KEY)
+                    .appendQueryParameter(API_KEY, BuildConfig.MY_MOVIE_DB_API_KEY)
                     .build();
 
             URL url = new URL(queryUri.toString());

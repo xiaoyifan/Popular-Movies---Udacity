@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.uchicago.yifan.popmovies.Constants;
+import com.uchicago.yifan.popmovies.BuildConfig;
 import com.uchicago.yifan.popmovies.DetailActivityFragment;
 import com.uchicago.yifan.popmovies.model.Review;
 
@@ -66,7 +66,7 @@ public class FetchReviewsTask extends AsyncTask<String, Void, List<Review>> {
             final String API_KEY_PARAM = "api_key";
 
             Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                    .appendQueryParameter(API_KEY_PARAM, Constants.API_KEY)
+                    .appendQueryParameter(API_KEY_PARAM, BuildConfig.MY_MOVIE_DB_API_KEY)
                     .build();
 
             URL url = new URL(builtUri.toString());

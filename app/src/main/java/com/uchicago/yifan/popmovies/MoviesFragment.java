@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 
 import com.uchicago.yifan.popmovies.adapter.GridAdapter;
 import com.uchicago.yifan.popmovies.data.MovieContract;
@@ -27,7 +28,11 @@ import com.uchicago.yifan.popmovies.queries.FetchMoviesTask;
  */
 public class MoviesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
+    private static final String SELECTED_OFFSET = "selected_offset";
+    private int list_position = ListView.INVALID_POSITION;
     private GridAdapter adapter;
+
+    private GridView gridview;
 
     private static final int MOVIES_LOADER = 0;
 
@@ -98,6 +103,10 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
 
+        if (list_position != ListView.INVALID_POSITION){
+            gridview.smoothScrollToPosition(list_position);
+        }
+
     }
 
     @Override
@@ -122,6 +131,17 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        if (list_position != ListView.INVALID_POSITION) {
+            outState.putInt(SELECTED_OFFSET, list_position);
+        }
+
+        super.onSaveInstanceState(outState);
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
@@ -129,7 +149,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
+        gridview = (GridView) rootView.findViewById(R.id.gridview);
         gridview.setAdapter(adapter);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -142,8 +162,14 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
                     ((Callback) getActivity())
                             .onItemSelected(new Movie(cursor));
                 }
+
+                list_position = position;
             }
         });
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_OFFSET)){
+            list_position = savedInstanceState.getInt(SELECTED_OFFSET);
+        }
 
         return rootView;
     }
