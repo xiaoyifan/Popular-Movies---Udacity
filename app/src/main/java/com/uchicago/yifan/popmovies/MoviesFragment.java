@@ -61,10 +61,6 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (Utility.hasNetworkConnection(getActivity()))
-        {
-            updateData();
-        }
         getLoaderManager().initLoader(MOVIES_LOADER, null, this);
 
     }
@@ -155,7 +151,10 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onStart() {
 
-        //updateData();
+        if (Utility.hasNetworkConnection(getActivity()))
+        {
+            updateData();
+        }
 
         super.onStart();
 
