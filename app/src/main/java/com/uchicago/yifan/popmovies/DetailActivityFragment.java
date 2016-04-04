@@ -97,7 +97,7 @@ public class DetailActivityFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (selectedMovie != null) {
+        if (selectedMovie != null && Utility.hasNetworkConnection(getActivity())) {
             String id = Integer.toString(selectedMovie.getId());
             new FetchTrailersTask(this).execute(Integer.toString(selectedMovie.getId()));
             new FetchReviewsTask(this).execute(Integer.toString(selectedMovie.getId()));
@@ -109,7 +109,7 @@ public class DetailActivityFragment extends Fragment {
         if (selectedMovie == null) return;
 
         favored = !favored;
-//        boolean favored = !selectedMovie.isFavored();
+
         button.setSelected(favored);
         setMovieFavored(selectedMovie, favored);
 

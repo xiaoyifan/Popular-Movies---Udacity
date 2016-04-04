@@ -119,10 +119,6 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
 
         Log.d(LOG_TAG, "FetchMoviesTask Complete. " + inserted + " Inserted");
 
-        //ArrayList<Movie> movieArray = convertContentValuesToUXFormat(cVVector);
-//
-//        return movieArray;
-
         }
         catch (JSONException e){
             Log.e(LOG_TAG, e.getMessage(), e);
@@ -130,27 +126,6 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
         }
 
     }
-
-//    ArrayList<Movie> convertContentValuesToUXFormat(Vector<ContentValues> cvv)
-//    {
-//        ArrayList<Movie> moviesList = new ArrayList<Movie>(cvv.size());
-//
-//        for(int i = 0; i< cvv.size(); i++)
-//        {
-//            ContentValues values = cvv.elementAt(i);
-//
-//            Movie movie = new Movie(values.getAsInteger(MovieContract.MovieEntry.COLUMN_MOVIE_ID),
-//                                    values.getAsString(MovieContract.MovieEntry.COLUMN_TITLE),
-//                                    values.getAsString(MovieContract.MovieEntry.COLUMN_OVERVIEW),
-//                    values.getAsString(MovieContract.MovieEntry.COLUMN_RATING),
-//                    values.getAsString(MovieContract.MovieEntry.COLUMN_DATE),
-//                    values.getAsString(MovieContract.MovieEntry.COLUMN_IMAGE),
-//                    values.getAsString(MovieContract.MovieEntry.COLUMN_IMAGE2));
-//            moviesList.add(movie);
-//        }
-//
-//        return moviesList;
-//    }
 
 
     @Override
@@ -189,20 +164,18 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
-                // Nothing to do.
+
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
             String line;
             while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
+
                 buffer.append(line + "\n");
             }
 
             if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
+
             }
             moviesJsonStr = buffer.toString();
             Log.v("Result", moviesJsonStr);
@@ -212,8 +185,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
 
         }catch (IOException e) {
             Log.e("MoviesFragment", "Error ", e);
-            // If the code didn't successfully get the weather data, there's no point in attemping
-            // to parse it.
+
             return null;
         }
         catch (JSONException e){

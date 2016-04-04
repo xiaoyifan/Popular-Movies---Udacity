@@ -56,9 +56,15 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
     private static boolean favorited = false;
 
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        if (Utility.hasNetworkConnection(getActivity()))
+        {
+            updateData();
+        }
         getLoaderManager().initLoader(MOVIES_LOADER, null, this);
 
     }
