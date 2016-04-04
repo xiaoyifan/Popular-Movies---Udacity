@@ -45,9 +45,4 @@ public class FetchFavoriteMoviesTask extends AsyncTask<Void, Void, List<Movie>> 
         return results;
     }
 
-    @Override
-    protected void onPostExecute(List<Movie> movies) {
-        mFragment.setAdapter((ArrayList<Movie>) movies);
-    }
-
 }

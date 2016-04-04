@@ -9,7 +9,6 @@ import android.util.Log;
 import com.uchicago.yifan.popmovies.Constants;
 import com.uchicago.yifan.popmovies.MoviesFragment;
 import com.uchicago.yifan.popmovies.data.MovieContract;
-import com.uchicago.yifan.popmovies.model.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,14 +20,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Vector;
 
 /**
  * Created by Yifan on 3/27/16.
  */
 //Cite: the Async Task code in our Sunshine app in the tutorial: https://github.com/udacity/Sunshine-Version-2
-public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
+public class FetchMoviesTask extends AsyncTask<String, Void, Void> {
 
     final String LOG_TAG = MoviesFragment.class.getSimpleName();
 
@@ -41,7 +39,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
         this.fragment = fragment;
     }
 
-    public ArrayList<Movie> createMovieListFromJson(String moviesJsonString) throws JSONException {
+    public void createMovieListFromJson(String moviesJsonString) throws JSONException {
 
         JSONObject moviesJson = new JSONObject(moviesJsonString);
 
@@ -55,14 +53,15 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
         final String movie_release_date = "release_date";
         final String movie_poster_path = "poster_path";
         final String movie_backdrop_path = "backdrop_path";
+        final String movie_popularity = "popularity";
         final String poster_URL = "http://image.tmdb.org/t/p/";
         String posterSize = "w185";
         String backdropSize = "w342";
 
     try {
 
-//        int deleted = mContext.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
-//        Log.d(LOG_TAG, "Previous data wiping Complete. " + deleted + " Deleted");
+        int deleted = mContext.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
+        Log.d(LOG_TAG, "Previous data wiping Complete. " + deleted + " Deleted");
 
         Vector<ContentValues> cVVector = new Vector<ContentValues>(moviesArray.length());
 
@@ -80,6 +79,8 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
 
             String posterPath = movieJsonObject.getString(movie_poster_path);
             String backdropPath = movieJsonObject.getString(movie_backdrop_path);
+
+            String popularity = movieJsonObject.getString(movie_popularity);
 
             Uri.Builder posterUrl = Uri.parse(poster_URL).buildUpon();
             Uri.Builder backdropUrl = Uri.parse(poster_URL).buildUpon();
@@ -102,24 +103,25 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
             contentValues.put(MovieContract.MovieEntry.COLUMN_DATE, releaseDate);
             contentValues.put(MovieContract.MovieEntry.COLUMN_IMAGE, imageUrl);
             contentValues.put(MovieContract.MovieEntry.COLUMN_IMAGE2, backUrl);
+            contentValues.put(MovieContract.MovieEntry.COLUMN_POPULARITY, popularity);
 
             cVVector.add(contentValues);
         }
 
             int inserted = 0;
 
-//            if  (cVVector.size() > 0) {
-//            ContentValues[] cvArray = new ContentValues[cVVector.size()];
-//            cVVector.toArray(cvArray);
-//
-//            inserted = mContext.getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
-//            }
+            if  (cVVector.size() > 0) {
+            ContentValues[] cvArray = new ContentValues[cVVector.size()];
+            cVVector.toArray(cvArray);
+
+            inserted = mContext.getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
+            }
 
         Log.d(LOG_TAG, "FetchMoviesTask Complete. " + inserted + " Inserted");
 
-        ArrayList<Movie> movieArray = convertContentValuesToUXFormat(cVVector);
-
-        return movieArray;
+        //ArrayList<Movie> movieArray = convertContentValuesToUXFormat(cVVector);
+//
+//        return movieArray;
 
         }
         catch (JSONException e){
@@ -127,33 +129,32 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
             e.printStackTrace();
         }
 
-        return null;
     }
 
-    ArrayList<Movie> convertContentValuesToUXFormat(Vector<ContentValues> cvv)
-    {
-        ArrayList<Movie> moviesList = new ArrayList<Movie>(cvv.size());
-
-        for(int i = 0; i< cvv.size(); i++)
-        {
-            ContentValues values = cvv.elementAt(i);
-
-            Movie movie = new Movie(values.getAsInteger(MovieContract.MovieEntry.COLUMN_MOVIE_ID),
-                                    values.getAsString(MovieContract.MovieEntry.COLUMN_TITLE),
-                                    values.getAsString(MovieContract.MovieEntry.COLUMN_OVERVIEW),
-                    values.getAsString(MovieContract.MovieEntry.COLUMN_RATING),
-                    values.getAsString(MovieContract.MovieEntry.COLUMN_DATE),
-                    values.getAsString(MovieContract.MovieEntry.COLUMN_IMAGE),
-                    values.getAsString(MovieContract.MovieEntry.COLUMN_IMAGE2));
-            moviesList.add(movie);
-        }
-
-        return moviesList;
-    }
+//    ArrayList<Movie> convertContentValuesToUXFormat(Vector<ContentValues> cvv)
+//    {
+//        ArrayList<Movie> moviesList = new ArrayList<Movie>(cvv.size());
+//
+//        for(int i = 0; i< cvv.size(); i++)
+//        {
+//            ContentValues values = cvv.elementAt(i);
+//
+//            Movie movie = new Movie(values.getAsInteger(MovieContract.MovieEntry.COLUMN_MOVIE_ID),
+//                                    values.getAsString(MovieContract.MovieEntry.COLUMN_TITLE),
+//                                    values.getAsString(MovieContract.MovieEntry.COLUMN_OVERVIEW),
+//                    values.getAsString(MovieContract.MovieEntry.COLUMN_RATING),
+//                    values.getAsString(MovieContract.MovieEntry.COLUMN_DATE),
+//                    values.getAsString(MovieContract.MovieEntry.COLUMN_IMAGE),
+//                    values.getAsString(MovieContract.MovieEntry.COLUMN_IMAGE2));
+//            moviesList.add(movie);
+//        }
+//
+//        return moviesList;
+//    }
 
 
     @Override
-    protected ArrayList<Movie> doInBackground(String... params) {
+    protected Void doInBackground(String... params) {
 
         if (params.length == 0)
             return null;
@@ -206,18 +207,17 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
             moviesJsonStr = buffer.toString();
             Log.v("Result", moviesJsonStr);
 
-            return createMovieListFromJson(moviesJsonStr);
+            createMovieListFromJson(moviesJsonStr);
 
 
         }catch (IOException e) {
-            Log.e("MovieFragment", "Error ", e);
+            Log.e("MoviesFragment", "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attemping
             // to parse it.
             return null;
         }
         catch (JSONException e){
-            Log.e(LOG_TAG, e.getMessage(), e);
-            e.printStackTrace();
+            Log.e("MoviesFragment", "Error parsing JSON ", e);
         }
         finally {
             if (urlConnection != null) {
@@ -235,12 +235,5 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
 
         return null;
     }
-
-//    @Override
-//    protected void onPostExecute(ArrayList<Movie> movieList) {
-//
-//        fragment.setAdapter(movieList);
-//
-//    }
 
 }

@@ -113,7 +113,13 @@ public class DetailActivityFragment extends Fragment {
         button.setSelected(favored);
         setMovieFavored(selectedMovie, favored);
 
-        showToast(R.string.message_movie_favored);
+        if (favored){
+            showToast(R.string.message_movie_favored);
+        }
+        else {
+            showToast(R.string.message_movie_unfavored);
+        }
+
     }
 
     private void setMovieFavored(Movie movie, boolean favored){
@@ -128,10 +134,11 @@ public class DetailActivityFragment extends Fragment {
             contentValues.put(MovieContract.MovieEntry.COLUMN_DATE, movie.getReleaseDate());
             contentValues.put(MovieContract.MovieEntry.COLUMN_IMAGE, movie.getImageUrl());
             contentValues.put(MovieContract.MovieEntry.COLUMN_IMAGE2, movie.getBackdropUrl());
-            getContext().getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+            contentValues.put(MovieContract.MovieEntry.COLUMN_POPULARITY, movie.getPopularity());
+            getContext().getContentResolver().insert(MovieContract.FavoriteEntry.CONTENT_URI, contentValues);
         }
         else {
-            getContext().getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(movie.getId()), null, null);
+            getContext().getContentResolver().delete(MovieContract.FavoriteEntry.buildFavoriteUri(movie.getId()), null, null);
         }
     }
 

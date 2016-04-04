@@ -20,9 +20,7 @@ import android.widget.GridView;
 import com.uchicago.yifan.popmovies.adapter.GridAdapter;
 import com.uchicago.yifan.popmovies.data.MovieContract;
 import com.uchicago.yifan.popmovies.model.Movie;
-import com.uchicago.yifan.popmovies.queries.FetchFavoriteMoviesTask;
-
-import java.util.ArrayList;
+import com.uchicago.yifan.popmovies.queries.FetchMoviesTask;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -41,7 +39,8 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
             MovieContract.MovieEntry.COLUMN_IMAGE2,
             MovieContract.MovieEntry.COLUMN_OVERVIEW,
             MovieContract.MovieEntry.COLUMN_RATING,
-            MovieContract.MovieEntry.COLUMN_DATE
+            MovieContract.MovieEntry.COLUMN_DATE,
+            MovieContract.MovieEntry.COLUMN_POPULARITY
     };
 
     public static final int COL_ID = 0;
@@ -52,11 +51,16 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     public static final int COL_OVERVIEW = 5;
     public static final int COL_RATING = 6;
     public static final int COL_DATE = 7;
+    public static final int COL_POPULARITY = 8;
+
+
+    private static boolean favorited = false;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(MOVIES_LOADER, null, this);
+
     }
 
     @Override
@@ -65,18 +69,33 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortOrder = preferences.getString("sortby", "popularity.desc");
 
-        return new CursorLoader(getActivity(),
-                MovieContract.MovieEntry.CONTENT_URI,
-                MOVIE_COLUMNS,
-                null,
-                null,
-                null);
+        Loader<Cursor> cursorLoader = null;
+        if (favorited == true) {
 
+            cursorLoader = new CursorLoader(getActivity(),
+                    MovieContract.FavoriteEntry.CONTENT_URI,
+                    MOVIE_COLUMNS,
+                    null,
+                    null,
+                    null);
+        }
+        else {
+            cursorLoader = new CursorLoader(getActivity(),
+                    MovieContract.MovieEntry.CONTENT_URI,
+                    MOVIE_COLUMNS,
+                    null,
+                    null,
+                    null);
+
+        }
+
+        return cursorLoader;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
+
     }
 
     @Override
@@ -111,6 +130,19 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
         gridview.setAdapter(adapter);
 
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //Movie movie = (Movie) parent.getItemAtPosition(position);
+                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+                if (cursor != null) {
+                    ((Callback) getActivity())
+                            .onItemSelected(new Movie(cursor));
+                }
+            }
+        });
+
         return rootView;
     }
 
@@ -134,7 +166,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            //updateData();
+            updateData();
             return true;
         }
         else if (id == R.id.action_favorite){
@@ -145,43 +177,24 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         return super.onOptionsItemSelected(item);
     }
 
-//    public void updateData(){
-//
-//        FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity(), this);
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//        String value = preferences.getString("sortby", "popularity.desc");
-//        moviesTask.execute(value);
-//
-//    }
+    public void updateData(){
+
+        favorited = false;
+
+        FetchMoviesTask moviesTask = new FetchMoviesTask(getActivity(), this);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String value = preferences.getString("sortby", "popularity.desc");
+        moviesTask.execute(value);
+
+        getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
+    }
 
     public void loadFavorites(){
-        FetchFavoriteMoviesTask task = new FetchFavoriteMoviesTask(getActivity(), this);
-        task.execute();
+
+        favorited = true;
+
+        getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
     }
-
-    public void setAdapter( final ArrayList<Movie> movieList )
-    {
-        GridView gridview = (GridView) getView().findViewById(R.id.gridview);
-        gridview.setAdapter(adapter);
-
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Movie selectedMovie = movieList.get(position);
-//                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
-//                detailIntent.putExtra(DetailActivity.EXTRA_MOVIE, selectedMovie);
-//                startActivity(detailIntent);
-
-                Movie movie = (Movie) parent.getItemAtPosition(position);
-                if (movie != null) {
-                    ((Callback) getActivity())
-                            .onItemSelected(movie);
-                }
-            }
-        });
-
-    }
-
 
 
 }

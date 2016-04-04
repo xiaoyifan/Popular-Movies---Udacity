@@ -17,5 +17,5 @@
     <string name="movie_item_btn_favorite_desc">Save to favorites</string>
 
     <string name="message_movie_favored">Saved to favorites.</string>
-
+    <string name="message_movie_unfavored">Cancelled.</string>
 </resources>

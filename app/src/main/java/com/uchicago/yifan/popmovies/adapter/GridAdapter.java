@@ -11,21 +11,14 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 import com.uchicago.yifan.popmovies.MoviesFragment;
 import com.uchicago.yifan.popmovies.R;
-import com.uchicago.yifan.popmovies.model.Movie;
-
-import java.util.ArrayList;
 
 /**
  * Created by Yifan on 2/24/16.
  */
 public class GridAdapter extends CursorAdapter {
 
-    private Context context;
-    private ArrayList<Movie> movieList;
-
     public GridAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
-        this.context = context;
     }
 
     @Override

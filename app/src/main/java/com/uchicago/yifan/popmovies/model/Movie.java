@@ -17,9 +17,11 @@ public class Movie implements Parcelable {
     private String overview;
     private String userRating;
     private String releaseDate;
+    private String popularity;
 
     private String imageUrl;
     private String backdropUrl;
+
 
     public String getOriginalTitle(){
         return originalTitle;
@@ -44,11 +46,15 @@ public class Movie implements Parcelable {
         return userRating;
     }
 
+    public String getPopularity(){
+        return popularity;
+    }
+
     public int getId(){
         return id;
     }
 
-    public Movie(int id, String originalTitle, String overview, String userRating, String releaseDate, String imageUrl, String backdropUrl) {
+    public Movie(int id, String originalTitle, String overview, String userRating, String releaseDate, String popularity, String imageUrl, String backdropUrl) {
         this.id = id;
         this.originalTitle = originalTitle;
         this.overview = overview;
@@ -56,6 +62,7 @@ public class Movie implements Parcelable {
         this.releaseDate = releaseDate;
         this.imageUrl = imageUrl;
         this.backdropUrl = backdropUrl;
+        this.popularity = popularity;
     }
 
     public Movie(Cursor cursor){
@@ -69,6 +76,7 @@ public class Movie implements Parcelable {
         this.releaseDate = cursor.getString(MoviesFragment.COL_DATE);
         this.imageUrl = cursor.getString(MoviesFragment.COL_IMAGE);
         this.backdropUrl = cursor.getString(MoviesFragment.COL_IMAGE2);
+        this.popularity = cursor.getString(MoviesFragment.COL_POPULARITY);
     }
 
     public static final Parcelable.Creator<Movie> CREATOR
@@ -97,6 +105,7 @@ public class Movie implements Parcelable {
         dest.writeString(overview);
         dest.writeString(userRating);
         dest.writeString(releaseDate);
+        dest.writeString(popularity);
     }
 
     private Movie(Parcel in) {
@@ -107,5 +116,6 @@ public class Movie implements Parcelable {
         overview = in.readString();
         userRating = in.readString();
         releaseDate = in.readString();
+        popularity = in.readString();
     }
 }
