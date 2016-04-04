@@ -14,12 +14,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.uchicago.yifan.popmovies.adapter.GridAdapter;
 import com.uchicago.yifan.popmovies.data.MovieContract;
 import com.uchicago.yifan.popmovies.model.Movie;
 import com.uchicago.yifan.popmovies.queries.FetchFavoriteMoviesTask;
+
+import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -156,28 +159,28 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         task.execute();
     }
 
-//    public void setAdapter( final ArrayList<Movie> movieList )
-//    {
-//        GridView gridview = (GridView) getView().findViewById(R.id.gridview);
-//        gridview.setAdapter(adapter);
-//
-//        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-////                Movie selectedMovie = movieList.get(position);
-////                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
-////                detailIntent.putExtra(DetailActivity.EXTRA_MOVIE, selectedMovie);
-////                startActivity(detailIntent);
-//
-//                Movie movie = (Movie) parent.getItemAtPosition(position);
-//                if (movie != null) {
-//                    ((Callback) getActivity())
-//                            .onItemSelected(movie);
-//                }
-//            }
-//        });
-//
-//    }
+    public void setAdapter( final ArrayList<Movie> movieList )
+    {
+        GridView gridview = (GridView) getView().findViewById(R.id.gridview);
+        gridview.setAdapter(adapter);
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Movie selectedMovie = movieList.get(position);
+//                Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+//                detailIntent.putExtra(DetailActivity.EXTRA_MOVIE, selectedMovie);
+//                startActivity(detailIntent);
+
+                Movie movie = (Movie) parent.getItemAtPosition(position);
+                if (movie != null) {
+                    ((Callback) getActivity())
+                            .onItemSelected(movie);
+                }
+            }
+        });
+
+    }
 
 
 
