@@ -156,7 +156,7 @@ public class DetailActivityFragment extends Fragment {
         ratingView.setText("Rating: "+selectedMovie.getUserRating()+"/10");
 
         int fav = getContext().getContentResolver().query(
-                MovieContract.MovieEntry.buildMovieUri(selectedMovie.getId()),
+                MovieContract.FavoriteEntry.buildFavoriteUri(selectedMovie.getId()),
                 null, null, null, null).getCount();
 
         favored = false;
