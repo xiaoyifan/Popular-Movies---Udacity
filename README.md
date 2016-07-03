@@ -6,3 +6,7 @@ Passed in Apr 4th.
 To build the app, replace "YOUR API KEY" n app build.gradle file 
 with the Api key you have applied from https://www.themoviedb.org/.
 
+![Video Walkthrough](movie.gif)
+
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
+
